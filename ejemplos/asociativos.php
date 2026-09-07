@@ -120,7 +120,8 @@ listPersonas($personas);
 
 
 function buscarporDNI(array $personas,string $dni)
-{
+{   
+    $band=false;
     foreach ($personas as $persona)
         {
             if ($persona['dni']==$dni)
@@ -131,19 +132,73 @@ function buscarporDNI(array $personas,string $dni)
                     echo "Ciudad: " . $persona["ciudad"] . "\n";
                     echo "DNI: " . $persona["dni"] . "\n";
                     echo "-------------------\n";
+                    $band=True;
                 } 
         }
+    if ($band!=true){
+        echo ("No se encontro a la persona de dni $dni\n");
+    }
 }
-function ordenar(array $personas){
+/* function ordenar(array $personas){
     sort($personas,SORT_STRING);
+}
+    */
+/* function ordenar2(array $personas){
+    $cota=count($personas)-1;
+    $k=1;
+    while ($k!=-1)
+        {
+            $k=-1;
+            for ($i=0;$i<$cota-1;$i++){
+                if (intval($personas[$i]['edad'])>intval($personas[$i+1]['edad']))
+                    {
+                        $aux=$personas[$i];
+                        $personas[$i]=$personas[$i+1];
+                        $personas[$i+1]=$aux;
+                        $k=$i;
+                    }
+            }
+            $cota=$k;
+        }
+}
+
+
+
+function ordenar(array $personas){
+    $i=0;
+    $to=count($personas)-1;
+    echo $i;
+    echo $to;
+    while ($i<$to){
+        $j=0;
+        
+        while ($j<$to){        
+            if (intval($personas[$i]["edad"])>intval($personas[$j]["edad"]))
+            {
+
+                $aux=$personas[$i];
+                $personas[$i]=$personas[$j];
+                $personas[$j]=$aux;
+
+            }
+            $j++;
+        }
+        $i++;
+
+    } 
 }
 function buscarporDNIBinarioA(array $personas, $dni)
 {
-    ordenar($personas);
+    listPersonas($personas);
+
+    ordenar2($personas);
+    listPersonas($personas);
+
+    $band=false;
     $inicio=0;
     $fin=sizeof($personas)-1;
-    while ($inicio<=$fin){
-        $mitad=($inicio+$fin)/2;
+    while ($inicio<=$fin and $band==FALSE){
+        $mitad=intdiv($inicio+$fin,2);
         if ($personas[$mitad]['dni']==$dni){
             echo "Se encontro a la persona de DNI: $dni\n";
             echo "Nombre: " . $personas[$mitad]["nombre"] . "\n";
@@ -151,6 +206,7 @@ function buscarporDNIBinarioA(array $personas, $dni)
             echo "Ciudad: " . $personas[$mitad]["ciudad"] . "\n";
             echo "DNI: " . $personas[$mitad]["dni"] . "\n";
             echo "-------------------\n";
+            $band=true;
         }
         elseif($personas[$mitad]["dni"]<$dni)
             {
@@ -164,7 +220,7 @@ function buscarporDNIBinarioA(array $personas, $dni)
     if($inicio>$fin){
         echo "No se encontro a la persona de DNI: $dni\n";
     }
-}
+} */
 function buscarporDNIBinario(array $personas, $dni){
     
     //Ordenar el arreglo por dni
@@ -172,8 +228,9 @@ function buscarporDNIBinario(array $personas, $dni){
         return $a['dni'] <=> $b['dni'];
     });
     $inicio = 0;
+    $band=false;
     $fin = count($personas) - 1;
-    while ($inicio <= $fin) {
+    while ($inicio <= $fin and $band==False ) {
         $medio = intdiv($inicio + $fin, 2);
         if ($personas[$medio]['dni'] == $dni) {
             echo"Se econtro a la persona de dni $dni \n";
@@ -182,17 +239,21 @@ function buscarporDNIBinario(array $personas, $dni){
             echo "Ciudad: " . $personas[$medio]["ciudad"] . "\n";
             echo "DNI: " . $personas[$medio]["dni"] . "\n";
             echo "-------------------\n";
-            return;
+            $band=true;
         } elseif ($personas[$medio]['dni'] < $dni) {
             $inicio = $medio + 1;
         } else {
             $fin = $medio - 1;
         }
     }
-    echo "No se encontro a la persona de dni $dni \n";
+    if ($band==false)
+        {
+            echo "No se encontro a la persona de dni $dni \n";    
+        }
+    
 }
 function buscarporNombre(array $personas,string $nombre)
-{
+{   $band=false;
     foreach($personas as $persona)
         {
             if(strtoupper($persona['nombre']) == strtoupper($nombre))
@@ -202,10 +263,14 @@ function buscarporNombre(array $personas,string $nombre)
                     echo "Edad: " . $persona["edad"] . "\n";
                     echo "Ciudad: " . $persona["ciudad"] . "\n";
                     echo "DNI: " . $persona["dni"] . "\n";
-                    echo "-------------------\n";                    
+                    echo "-------------------\n";      
+                    $band=TRUE ;             
                 }
-
         }
+    if ($band==false)
+    {
+        echo "No se encontro a la persona de nombre $nombre \n";    
+    }
 }
 
 
