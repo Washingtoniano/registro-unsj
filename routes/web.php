@@ -1,16 +1,20 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ListarPersonasController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MovieController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/usuarios',[UserController::class,'index']);
+Route::get('/usuarios', [UserController::class, 'index']);
+Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
+Route::get('/movies/{id}/edit', [MovieController::class, 'edit']);
+Route::put('/movies/{id}', [MovieController::class, 'update'])->name('movies.update');
 
-Route::get("/personas", [ListarPersonasController::class,'index']);
+Route::get('/personas', [ListarPersonasController::class, 'index']);
 
 Route::get('/home', function () {
     return view('home');
@@ -27,5 +31,3 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
-
-
