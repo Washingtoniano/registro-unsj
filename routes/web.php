@@ -11,7 +11,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/usuarios', [UserController::class, 'index']);
-Route::get('/animales', [AnimalController::class, 'index']);
+Route::get('/animales', [AnimalController::class, 'index'])->name('animals.index');
+Route::get('/animales/{id}/edit', [AnimalController::class, 'edit'])->name('animals.edit');
+Route::put('/animales/{id}', [AnimalController::class, 'update'])->name('animals.update');
+Route::delete('/animales/{id}', [AnimalController::class, 'destroy'])->name('animals.destroy');
 Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
 Route::get('/movies/create', [MovieController::class, 'create'])->name('movies.create');
 Route::post('/movies', [MovieController::class, 'store'])->name('movies.store');
