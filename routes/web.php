@@ -5,11 +5,13 @@ use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AnimalController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/usuarios', [UserController::class, 'index']);
+Route::get('/animales', [AnimalController::class, 'index']);
 Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
 Route::get('/movies/create', [MovieController::class, 'create'])->name('movies.create');
 Route::post('/movies', [MovieController::class, 'store'])->name('movies.store');
