@@ -19,6 +19,31 @@ class AnimalController extends Controller
         return view('animals.index', ['animals' => $request->session()->get('animals', $this->animals)]);
     }
 
+    public function create(): View
+    {
+        return view('animals.create');
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'species' => ['required', 'string', 'max:255'],
+        ]);
+
+        $animals = collect($request->session()->get('animals', $this->animals));
+        $nextId = ((int) $animals->max('id')) + 1;
+
+        $animals->push([
+            'id' => $nextId,
+            ...$validated,
+        ]);
+
+        $request->session()->put('animals', $animals->all());
+
+        return to_route('animals.index')->with('status', 'Animal agregado correctamente.');
+    }
+
     public function edit(Request $request, int $id): View
     {
         $animal = collect($request->session()->get('animals', $this->animals))->firstWhere('id', $id);

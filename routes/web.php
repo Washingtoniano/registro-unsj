@@ -12,6 +12,8 @@ Route::get('/', function () {
 });
 Route::get('/usuarios', [UserController::class, 'index']);
 Route::get('/animales', [AnimalController::class, 'index'])->name('animals.index');
+Route::get('/animales/create', [AnimalController::class, 'create'])->name('animals.create');
+Route::post('/animales', [AnimalController::class, 'store'])->name('animals.store');
 Route::get('/animales/{id}/edit', [AnimalController::class, 'edit'])->name('animals.edit');
 Route::put('/animales/{id}', [AnimalController::class, 'update'])->name('animals.update');
 Route::delete('/animales/{id}', [AnimalController::class, 'destroy'])->name('animals.destroy');

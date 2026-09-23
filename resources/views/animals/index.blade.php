@@ -10,9 +10,14 @@
                 <h1 class="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">Animales registrados</h1>
                 <p class="mt-2 max-w-2xl text-slate-400">Consultá de forma rápida los animales que forman parte del registro.</p>
             </div>
-            <span class="inline-flex w-fit items-center rounded-full bg-emerald-400/10 px-3 py-1 text-sm font-semibold text-emerald-300 ring-1 ring-inset ring-emerald-400/20">
-                {{ count($animals) }} {{ count($animals) === 1 ? 'animal' : 'animales' }}
-            </span>
+            <div class="flex flex-wrap items-center gap-3">
+                <span class="inline-flex w-fit items-center rounded-full bg-emerald-400/10 px-3 py-1 text-sm font-semibold text-emerald-300 ring-1 ring-inset ring-emerald-400/20">
+                    {{ count($animals) }} {{ count($animals) === 1 ? 'animal' : 'animales' }}
+                </span>
+                <a href="{{ route('animals.create') }}" class="inline-flex items-center rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 focus:ring-offset-slate-950">
+                    + Agregar animal
+                </a>
+            </div>
         </div>
 
         @if (count($animals) > 0)
