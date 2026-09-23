@@ -4,10 +4,13 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ListarPersonasController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\MovieController;
 
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/movies', [MovieController::class, 'index']);
+
 Route::get('/usuarios',[UserController::class,'index']);
 
 Route::get("/personas", [ListarPersonasController::class,'index']);
