@@ -11,12 +11,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/usuarios', [UserController::class, 'index']);
-Route::get('/animales', [AnimalController::class, 'index'])->name('animals.index');
-Route::get('/animales/create', [AnimalController::class, 'create'])->name('animals.create');
-Route::post('/animales', [AnimalController::class, 'store'])->name('animals.store');
-Route::get('/animales/{id}/edit', [AnimalController::class, 'edit'])->name('animals.edit');
-Route::put('/animales/{id}', [AnimalController::class, 'update'])->name('animals.update');
-Route::delete('/animales/{id}', [AnimalController::class, 'destroy'])->name('animals.destroy');
+Route::get('/animals', [AnimalController::class, 'index'])->name('animals.index');
+Route::get('/animals/create', [AnimalController::class, 'create'])->name('animals.create');
+Route::post('/animals', [AnimalController::class, 'store'])->name('animals.store');
+Route::get('/animals/{id}/edit', [AnimalController::class, 'edit'])->name('animals.edit');
+Route::put('/animals/{id}', [AnimalController::class, 'update'])->name('animals.update');
+Route::delete('/animals/{id}', [AnimalController::class, 'destroy'])->name('animals.destroy');
 Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
 Route::get('/movies/create', [MovieController::class, 'create'])->name('movies.create');
 Route::post('/movies', [MovieController::class, 'store'])->name('movies.store');
