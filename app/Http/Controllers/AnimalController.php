@@ -8,81 +8,137 @@ use Illuminate\View\View;
 
 class AnimalController extends Controller
 {
-    private array $animals = [
-        ['id' => 1, 'name' => 'Lion', 'species' => 'Panthera leo'],
-        ['id' => 2, 'name' => 'Elephant', 'species' => 'Loxodonta africana'],
-        ['id' => 3, 'name' => 'Giraffe', 'species' => 'Giraffa camelopardalis'],
-    ];
-
-    public function index(Request $request): View
+    /**
+     * Prepara datos de ejemplo y compatibilidad para sesiones sin animales.
+     */
+    public function __construct()
     {
-        return view('animals.index', ['animals' => $request->session()->get('animals', $this->animals)]);
+        // La colección de animales vive en la sesión; estos valores permiten probar la pantalla al inicio.
+        if (! session()->has('animals')) {
+            session([
+                'animals'=>[
+                    '1'=> ['name' => 'Perro', 'species' => 'Canino'],
+                    '2'=> ['name' => 'Gato', 'species' => 'Felino'],
+                    '3'=> ['name' => 'Nemo', 'species' => 'Pez'],
+                ]
+            ]);
+        }
+
+        // Calcula un próximo entero a partir de las claves numéricas ya guardadas.
+        // store() todavía usa uniqid(), por lo que este contador no participa en las altas actuales.
+        if (! session()->has('animals_next_id')) {
+            $animalIds = array_filter(
+                array_keys(session('animals', [])),
+                fn (int|string $id): bool => ctype_digit((string) $id)
+            );
+
+            session([
+                'animals_next_id' => $animalIds === []
+                    ? 1
+                    : max(array_map('intval', $animalIds)) + 1,
+            ]);
+        }
     }
 
-    public function create(): View
+    /**
+     * Muestra el registro completo de animales almacenado para la sesión actual.
+     */
+    public function index() 
+    {
+        $animals = session('animals');
+        return view('animals.index', ['animals' => $animals]);
+    }
+
+    /**
+     * Presenta el formulario para incorporar un animal al registro.
+     */
+    public function create() 
     {
         return view('animals.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    /**
+     * Valida los datos y agrega el animal a la colección de la sesión.
+     */
+    public function store(Request $request)
     {
+        // La validación limita los datos guardados a campos esperados y a una edad entera no negativa.
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'species' => ['required', 'string', 'max:255'],
+            'edad' => ['required', 'integer', 'min:0'],
         ]);
+        $validated['edad'] = (int) $validated['edad'];
 
-        $animals = collect($request->session()->get('animals', $this->animals));
-        $nextId = ((int) $animals->max('id')) + 1;
+        // La clave de sesión identifica el registro; uniqid() produce una clave de texto.
+        $animals = session('animals');
+        $nuevoID=uniqid();
+        $animals[$nuevoID] = $validated;
+        session(['animals' => $animals]);
 
-        $animals->push([
-            'id' => $nextId,
-            ...$validated,
-        ]);
-
-        $request->session()->put('animals', $animals->all());
-
-        return to_route('animals.index')->with('status', 'Animal agregado correctamente.');
+        // Vuelve al listado y adjunta un mensaje temporal para la siguiente respuesta.
+        return redirect()->route('animals.index')->with('success', 'Animal agregado correctamente.');
     }
 
-    public function edit(Request $request, int $id): View
+    /**
+     * Busca un animal por su clave y muestra el formulario de edición.
+     */
+    public function edit( $id) 
     {
-        $animal = collect($request->session()->get('animals', $this->animals))->firstWhere('id', $id);
+        $animals= session('animals');
+        $animal = $animals[$id] ?? null;
 
-        abort_if($animal === null, 404);
+        // Si la clave no existe en la sesión, no hay registro que pueda editarse.
+        if (! $animal){
+            return redirect()->route('animals.index')->with('error', 'Animal no encontrado.');
+        }
 
-        return view('animals.edit', ['animal' => $animal]);
+        return view('animals.edit', ['id' => $id, 'animal' => $animal]);
     }
 
-    public function update(Request $request, int $id): RedirectResponse
+    /**
+     * Valida los campos enviados y reemplaza sus valores en el animal existente.
+     */
+    public function update(Request $request,  $id)
     {
+        // edad es obligatoria según estas reglas; el formulario de edición debe enviarla también.
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'species' => ['required', 'string', 'max:255'],
+            'edad' => ['required', 'integer', 'min:0'],
         ]);
+        $validated['edad'] = (int) $validated['edad'];
 
-        $animals = collect($request->session()->get('animals', $this->animals));
-        abort_if($animals->where('id', $id)->isEmpty(), 404);
+        $animals = session('animals');
+        $animal = $animals[$id] ?? null;
 
-        $request->session()->put(
-            'animals',
-            $animals->map(fn (array $animal): array => $animal['id'] === $id
-                ? [...$animal, ...$validated]
-                : $animal)->values()->all()
-        );
+        // Se conserva la colección y se actualiza solo el registro cuya clave vino en la ruta.
+        if (! $animal) {
+            return redirect()->route('animals.index')->with('error', 'Animal no encontrado.');
+        }
+        $animal = [...$animal, ...$validated];
+        $animals[$id] = $animal;
+        session(['animals' => $animals]);
+       
 
-        return to_route('animals.index')->with('status', 'Animal actualizado correctamente.');
+        return redirect()->route('animals.index')->with('status', 'Animal actualizado correctamente.');
     }
 
-    public function destroy(Request $request, int $id): RedirectResponse
+    /**
+     * Elimina de la sesión el animal identificado por la clave de la ruta.
+     */
+    public function destroy(  $id) 
     {
-        $animals = collect($request->session()->get('animals', $this->animals));
-        abort_if($animals->where('id', $id)->isEmpty(), 404);
+        $animals = session('animals');
+        $animal = $animals[$id] ?? null;
 
-        $request->session()->put(
-            'animals',
-            $animals->reject(fn (array $animal): bool => $animal['id'] === $id)->values()->all()
-        );
+        // Evita modificar la colección si el ID no corresponde a un registro de esta sesión.
+        if (! $animal) {
+            return redirect()->route('animals.index')->with('error', 'Animal no encontrado.');
+        }
+        unset($animals[$id]);
+        session(['animals' => $animals]);
+        return redirect()->route('animals.index')->with('status', 'Animal eliminado correctamente.');
 
-        return to_route('animals.index')->with('status', 'Animal eliminado correctamente.');
     }
 }

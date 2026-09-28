@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="color-scheme" content="dark">
 
+        {{-- Cada vista define su título; la aplicación provee un nombre alternativo si no está configurado. --}}
         <title>@yield('title', 'Animales') · {{ config('app.name', 'Registro UNSJ') }}</title>
 
         <style>[x-cloak] { display: none !important; }</style>
@@ -15,9 +16,10 @@
     <body class="min-h-screen bg-slate-950 font-sans text-slate-100 antialiased">
         <div class="flex min-h-screen flex-col">
             <header class="border-b border-slate-800/80 bg-slate-950/95">
+                {{-- La navegación se comparte entre el listado y los formularios de animales. --}}
                 <nav x-data="{ open: false }" class="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Navegación principal">
                     <div class="flex min-h-20 items-center justify-between gap-6">
-                        <a href="{{ url('/animales') }}" class="group flex items-center gap-3" aria-label="Ir al registro de animales">
+                        <a href="{{ url('/animals') }}" class="group flex items-center gap-3" aria-label="Ir al registro de animales">
                             <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-400/10 text-2xl ring-1 ring-inset ring-emerald-400/20 transition group-hover:bg-emerald-400/20" aria-hidden="true">
                                 🐾
                             </span>
@@ -28,7 +30,7 @@
                         </a>
 
                         <div class="hidden items-center gap-6 sm:flex">
-                            <a href="{{ url('/animales') }}" class="text-sm font-semibold text-slate-300 transition hover:text-emerald-300">
+                            <a href="{{ url('/animals') }}" class="text-sm font-semibold text-slate-300 transition hover:text-emerald-300">
                                 Animales
                             </a>
                             @yield('header-actions')
@@ -45,7 +47,7 @@
                     </div>
 
                     <div id="animal-mobile-menu" x-cloak x-show="open" x-transition class="border-t border-slate-800 py-4 sm:hidden">
-                        <a href="{{ url('/animales') }}" class="block rounded-lg px-3 py-2 text-sm font-semibold text-slate-300 transition hover:bg-slate-900 hover:text-emerald-300">
+                        <a href="{{ url('/animals') }}" class="block rounded-lg px-3 py-2 text-sm font-semibold text-slate-300 transition hover:bg-slate-900 hover:text-emerald-300">
                             Animales
                         </a>
                         <div class="mt-3 flex flex-wrap gap-3 px-3">
@@ -56,6 +58,7 @@
             </header>
 
             <main class="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+                {{-- Los redirects con flash status muestran aquí su confirmación temporal. --}}
                 @if (session('status'))
                     <div class="mb-6 rounded-xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3 text-sm font-medium text-emerald-300" role="status">
                         {{ session('status') }}
