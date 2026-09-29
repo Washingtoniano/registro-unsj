@@ -18,6 +18,13 @@
                 <a href="{{ route('animals.create') }}" class="inline-flex items-center rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 focus:ring-offset-slate-950">
                     + Agregar animal
                 </a>
+                    <form action="{{ route('animals.reset') }}" method="POST" class="inline-flex items-center rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 focus:ring-offset-slate-950">
+                        @csrf
+                        @method('POST')
+                        <button type="submit" class="inline-flex items-center justify-center rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 focus:ring-offset-slate-950" onclick="return confirm('¿Estás seguro de que deseas resetear la sesión? Esto eliminará todos los animales registrados.');">
+                            Resetear sesión
+                        </button>
+                    </form>
             </div>
         </div>
 

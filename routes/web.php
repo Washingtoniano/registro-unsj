@@ -22,7 +22,8 @@ Route::prefix('animals')->name('animals.')->group(function () {
 });
  */
 // Registra las rutas REST de animales con nombres como animals.index y animals.update.
-route::resource('animals', AnimalController::class);
+Route::resource('animals', AnimalController::class);
+Route::post('/animals/reset', [AnimalController::class, 'reset'])->name('animals.reset');
 
 /* //Read-Mostrar listado de animales
 Route::get('/animals', [AnimalController::class, 'index'])->name('animals.index');

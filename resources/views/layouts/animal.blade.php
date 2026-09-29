@@ -59,9 +59,9 @@
 
             <main class="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
                 {{-- Los redirects con flash status muestran aquí su confirmación temporal. --}}
-                @if (session('status'))
+                @if (session('success'))
                     <div class="mb-6 rounded-xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3 text-sm font-medium text-emerald-300" role="status">
-                        {{ session('status') }}
+                        {{ session('success') }}
                     </div>
                 @endif
 

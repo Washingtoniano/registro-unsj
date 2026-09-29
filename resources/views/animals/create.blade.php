@@ -36,6 +36,7 @@
                 <input type="text" id="name" name="name" value="{{ old('name') }}" required autofocus class="mt-2 block w-full rounded-lg border-slate-700 bg-slate-950 px-4 py-3 text-white shadow-sm placeholder:text-slate-500 focus:border-emerald-400 focus:ring-emerald-400" placeholder="Ej. León">
             </div>
 
+
             <div>
                 <label for="species" class="block text-sm font-semibold text-slate-200">Especie</label>
                 <input type="text" id="species" name="species" value="{{ old('species') }}" required class="mt-2 block w-full rounded-lg border-slate-700 bg-slate-950 px-4 py-3 text-white shadow-sm placeholder:text-slate-500 focus:border-emerald-400 focus:ring-emerald-400" placeholder="Ej. Panthera leo">
