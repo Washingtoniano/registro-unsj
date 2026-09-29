@@ -18,9 +18,9 @@ class AnimalController extends Controller
         if (! session()->has('animals')) {
             session([
                 'animals'=>[
-                    '1'=> ['name' => 'Perro', 'species' => 'Canino'],
-                    '2'=> ['name' => 'Gato', 'species' => 'Felino'],
-                    '3'=> ['name' => 'Nemo', 'species' => 'Pez'],
+                    '1'=> ['name' => 'Perro', 'species' => 'Canino', 'edad' => 3],
+                    '2'=> ['name' => 'Gato', 'species' => 'Felino', 'edad' => 2],
+                    '3'=> ['name' => 'Nemo', 'species' => 'Pez', 'edad' => 1],
                 ]
             ]);
         }

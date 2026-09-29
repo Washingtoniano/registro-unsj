@@ -28,7 +28,7 @@
                     <article class="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg shadow-slate-950/20 transition hover:-translate-y-1 hover:border-emerald-400/50 hover:shadow-emerald-950/30">
                         <div class="flex items-start justify-between gap-4">
                             <div>
-                                <p class="text-sm font-medium text-emerald-400">Animal #{{ $id }}</p>
+                                <p class="text-sm font-medium text-emerald-400">Animal #{{ $loop->iteration }}</p>
                                 <h2 class="mt-2 text-xl font-bold text-white">{{ $animal['name'] }}</h2>
                             </div>
                             <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-400/10 text-lg" aria-hidden="true">🐾</span>
