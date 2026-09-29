@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use App\Http\Requests\AnimalDataRequest;
 
 class AnimalController extends Controller
 {
@@ -60,15 +61,12 @@ class AnimalController extends Controller
     /**
      * Valida los datos y agrega el animal a la colección de la sesión.
      */
-    public function store(Request $request)
+    public function store(AnimalDataRequest $request)
     {
         // La validación limita los datos guardados a campos esperados y a una edad entera no negativa.
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'species' => ['required', 'string', 'max:255'],
-            'edad' => ['required', 'integer', 'min:0'],
-        ]);
-        $validated['edad'] = (int) $validated['edad'];
+        $validated = $request->validated();
+
+        // $validated['edad'] = (int) $validated['edad'];
 
         // La clave de sesión identifica el registro; uniqid() produce una clave de texto.
         $animals = session('animals');
@@ -99,15 +97,10 @@ class AnimalController extends Controller
     /**
      * Valida los campos enviados y reemplaza sus valores en el animal existente.
      */
-    public function update(Request $request,  $id)
+    public function update(AnimalDataRequest $request,  $id)
     {
         // edad es obligatoria según estas reglas; el formulario de edición debe enviarla también.
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'species' => ['required', 'string', 'max:255'],
-            'edad' => ['required', 'integer', 'min:0'],
-        ]);
-        $validated['edad'] = (int) $validated['edad'];
+        // $validated = $request->validated();
 
         $animals = session('animals');
         $animal = $animals[$id] ?? null;
@@ -116,7 +109,7 @@ class AnimalController extends Controller
         if (! $animal) {
             return redirect()->route('animals.index')->with('error', 'Animal no encontrado.');
         }
-        $animal = [...$animal, ...$validated];
+        $animal = [...$animal, ...$request->validated()];
         $animals[$id] = $animal;
         session(['animals' => $animals]);
        
