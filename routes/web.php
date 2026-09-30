@@ -4,7 +4,7 @@ use App\Http\Controllers\ListarPersonasController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Route; //vendor/laravel/framework/src/Illuminate/Routing/Route.php
 use App\Http\Controllers\AnimalController;
 
 /* Route::get('/', function () {

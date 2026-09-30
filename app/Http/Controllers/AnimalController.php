@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Contracts\AnimalServiceInterface;
 use App\Http\Requests\AnimalDataRequest;
-
+//Si quiero trabajar con dos guardados debo generar una interfaz y servicio para cada metodo, traerlos al controller y modificarlo 
 class AnimalController extends Controller
 {
     public function __construct(private AnimalServiceInterface $animalService)

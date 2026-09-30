@@ -1,7 +1,8 @@
 <?php
 namespace App\Services;
 use App\Contracts\AnimalServiceInterface;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Storage; //vendor/laravel/framework/src/Illuminate/Support/Facades/Storage.php
+//Illuminate depende del framework, no se toca
 use App\Exceptions\AnimalNotFoundException;
 class FileAnimalServices implements AnimalServiceInterface
 {
